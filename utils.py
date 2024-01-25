@@ -54,9 +54,8 @@ def _topic_from_topic_distr(topic_distr: ndarray, threshold: float = 0.2, topics
     topics_list = []
     for i in range(topic_distr.shape[0]):
         row = topic_distr[i]
-        # Find indexes where data surpasses the threshold
         indexes_above_threshold = np.where(row > threshold)[0]
-        # Sort indexes based on the corresponding data values in descending order
+        # Sort indexes for ordered return list
         sorted_indexes = sorted(indexes_above_threshold, key=lambda i: row[i], reverse=True)
         if len(sorted_indexes != 0):
             topics_list.append(sorted_indexes)
@@ -116,7 +115,6 @@ def predict_new_document(topic_model: BERTopic, docs: List[str], embeddings: nda
     -------
         topics_for_each_document (List[List[int]]): The lists that contains possible topics of each documents 
     '''
-    # return topic_model.transform(docs, embeddings)
     topic_distr, _ = topic_model.approximate_distribution(docs)
     #current problem: topic_distr works incorrectly for our dataset for some reason ?
     topics_for_each_document = _topic_from_topic_distr(topic_distr, threshold = SUBTOPIC_THRESHOLD)
